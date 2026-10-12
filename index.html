@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تمرین تومان و ریال</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f4ef;--card:#fff;--fg:#1f2430;--mut:#6b7280;--acc:#0f766e;--ok:#15803d;--bad:#b91c1c;--bd:#e3dfd6;--chip:#e6f4f1;--badbg:rgba(185,28,28,.1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171c;--card:#1d2128;--fg:#eef0f3;--mut:#9aa3b0;--acc:#2dd4bf;--ok:#4ade80;--bad:#f87171;--bd:#2c323b;--chip:#16322f}}
+:root[data-theme="dark"]{--bg:#14171c;--card:#1d2128;--fg:#eef0f3;--mut:#9aa3b0;--acc:#2dd4bf;--ok:#4ade80;--bad:#f87171;--bd:#2c323b;--chip:#16322f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.7}
+main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.3rem;margin:0 0 4px}
+h2{font-size:1.05rem;margin:0 0 8px}
+.sub{color:var(--mut);font-size:.9rem;margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+select,input,button{font:inherit;color:inherit}
+select{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
+.num{font-size:2.2rem;font-weight:700;text-align:center;direction:ltr;margin:6px 0}
+.unit{display:block;text-align:center;margin:0 auto 6px;width:max-content;background:var(--chip);color:var(--acc);border-radius:99px;padding:3px 16px;font-weight:700}
+.lbl{font-size:.9rem;color:var(--mut);text-align:center;margin-bottom:12px}
+input[type=text]{width:100%;padding:12px 14px;border:2px solid var(--bd);border-radius:10px;background:var(--bg);font-size:1.05rem}
+input[type=text]:focus{outline:none;border-color:var(--acc)}
+.btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+button{border:0;border-radius:10px;padding:10px 18px;cursor:pointer;background:var(--acc);color:#fff;font-weight:700}
+button.sec{background:var(--bg);color:var(--fg);border:1px solid var(--bd);font-weight:400}
+button:disabled{opacity:.45;cursor:default}
+#fb{margin-top:14px;padding:12px 14px;border-radius:10px;display:none}
+#fb.ok{display:block;background:var(--chip);color:var(--ok)}
+#fb.bad{display:block;background:var(--badbg);color:var(--bad)}
+#fb .ans{color:var(--fg);font-weight:700;margin-top:4px}
+#fb .eq{color:var(--mut);font-size:.9rem;margin-top:4px}
+.tip{font-size:.85rem;color:var(--mut)}
+.bar{height:8px;background:var(--bd);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+.stats{display:flex;gap:14px;font-size:.9rem;color:var(--mut)}
+.stats b{color:var(--fg)}
+.score{text-align:center}
+.score .big{font-size:3rem;font-weight:800;color:var(--acc);line-height:1.2}
+.score .of{color:var(--mut)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.grid div{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center;font-size:.9rem}
+.grid b{display:block;font-size:1.1rem}
+.scroll{overflow-x:auto;max-height:340px;overflow-y:auto;border:1px solid var(--bd);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+th{position:sticky;top:0;background:var(--card)}
+td.w{white-space:normal;min-width:180px}
+#toast{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:50%;transform:translate(-50%,-200%);padding:10px 24px;border-radius:99px;font-weight:700;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:transform .2s;z-index:10;pointer-events:none;text-align:center;max-width:calc(100vw - 24px);border-radius:18px}
+#toast small{display:block;font-weight:400;font-size:.92rem;margin-top:2px}
+#toast.show{transform:translate(-50%,0)}
+#toast.ok{background:#15803d}
+#toast.bad{background:#b91c1c}
+input[type=number]{width:84px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
+.hid{display:none}
+textarea{width:100%;height:140px;margin-top:10px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px;font:inherit;font-size:.85rem}
+</style>
+</head>
+<body>
+<div id="toast" role="status" aria-live="polite"></div>
+<main>
+
+<!-- START -->
+<section id="start">
+  <h1>تمرین نوشتن مبلغ با حروف</h1>
+  <p class="sub">تعداد سؤال‌های هر راند را خودت مشخص می‌کنی (پیش‌فرض ۱۰۰). در پایان نمره‌ات و یک فایل گزارش قابل دانلود می‌گیری.</p>
+  <div class="card" id="resumeBox" style="display:none">
+    <h2>یک راند نیمه‌تمام داری</h2>
+    <p class="tip" id="resumeTxt"></p>
+    <div class="btns"><button id="resume">ادامه‌ی راند</button><button class="sec" id="drop">حذف و شروع از نو</button></div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <label>نوع تمرین:
+        <select id="mode"><option value="write">نوشتن مبلغ با حروف</option><option value="convert">تبدیل ریال ↔ تومان</option><option value="mixed" selected>ترکیبی</option></select>
+      </label>
+      <label id="fmtWrap">جواب تبدیل:
+        <select id="fmtSel"><option value="words">با حروف</option><option value="digits">با رقم</option></select>
+      </label>
+      <label>تعداد سؤال:
+        <input type="number" id="cnt" min="1" max="500" value="100" inputmode="numeric">
+      </label>
+      <label>سطح:
+        <select id="lvl">
+          <option value="1">تا ۹۹۹</option>
+          <option value="2" selected>تا هزارها (۹۹۹٬۹۹۹)</option>
+          <option value="3">تا میلیون‌ها</option>
+          <option value="4">تا میلیاردها</option>
+        </select>
+      </label>
+      <button id="go">شروع راند جدید</button>
+    </div>
+    <label class="tip" style="display:block;margin-top:12px"><input type="checkbox" id="hintOn" checked> نمایش راهنمای تبدیل در سؤال‌های تبدیل</label>
+    <label class="tip" style="display:block;margin-top:6px"><input type="checkbox" id="sndOn" checked> صدا و لرزش همراه نوتیف درست/غلط</label>
+    <p class="tip" style="margin:8px 0 0">هر عدد فقط یک بار پاسخ داده می‌شود. عدد را با حروف بنویس و در آخرش «تومان» یا «ریال» را مطابق چیزی که نشان داده می‌شود اضافه کن. هر ۱ تومان = ۱۰ ریال.</p>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="hid">
+  <div class="card">
+    <div class="row">
+      <div class="stats"><span>سؤال <b id="qi">۱</b> از <b id="qTot">۱۰۰</b></span><span>درست: <b id="qok">۰</b></span></div>
+      <button class="sec" id="exit" style="padding:5px 12px">خروج (ذخیره می‌شود)</button>
+    </div>
+    <div class="bar"><i id="pb"></i></div>
+  </div>
+  <div class="card">
+    <div class="num" id="num">—</div>
+    <span class="unit" id="unit">—</span>
+    <div class="lbl" id="lblTxt"></div>
+    <div class="tip" id="rule" style="text-align:center;margin-bottom:10px"></div>
+    <input type="text" id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="مثلاً: دوازده هزار و پانصد تومان">
+    <div class="btns">
+      <button id="chk">بررسی</button>
+      <button class="sec" id="show">نمی‌دانم (نمایش پاسخ)</button>
+      <button class="sec" id="nxt" disabled>بعدی</button>
+    </div>
+    <div id="fb"></div>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="hid">
+  <div class="card score">
+    <div class="of">نتیجه‌ی راند</div>
+    <div class="big" id="rScore">—</div>
+    <div class="of" id="rGrade"></div>
+    <div id="rVerdict" style="margin-top:6px;font-weight:700"></div>
+    <div class="grid" id="rGrid"></div>
+  </div>
+  <div class="card">
+    <h2>گزارش</h2>
+    <div class="btns" style="margin-top:0">
+      <button id="dlCsv">دانلود CSV</button>
+      <button class="sec" id="dlTxt">دانلود گزارش متنی</button>
+      <button class="sec" id="newRound">راند جدید</button>
+    </div>
+    <p class="tip" id="dlNote" style="margin:8px 0 0"></p>
+    <textarea id="fallback" class="hid" readonly></textarea>
+  </div>
+  <div class="card">
+    <h2>اشتباه‌ها</h2>
+    <div id="mist"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const ONES=['','یک','دو','سه','چهار','پنج','شش','هفت','هشت','نه','ده','یازده','دوازده','سیزده','چهارده','پانزده','شانزده','هفده','هجده','نوزده'];
+const TENS=['','','بیست','سی','چهل','پنجاه','شصت','هفتاد','هشتاد','نود'];
+const HUND=['','صد','دویست','سیصد','چهارصد','پانصد','ششصد','هفتصد','هشتصد','نهصد'];
+const SCALE=['','هزار','میلیون','میلیارد'];
+const KEY='tomanRialRound.v2';
+const $=id=>document.getElementById(id);
+const fa=s=>String(s).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]).replace(/\./g,'٫');
+const fmt=n=>fa(n.toLocaleString('en-US').replace(/,/g,'٬'));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>s.replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/[\u200c\u200f\u200e\s.،,]/g,'').replace(/تومن$/,'تومان');
+
+function group(n){
+  const p=[],h=Math.floor(n/100),r=n%100;
+  if(h)p.push(HUND[h]);
+  if(r){ if(r<20)p.push(ONES[r]); else{p.push(TENS[Math.floor(r/10)]); if(r%10)p.push(ONES[r%10]);} }
+  return p.join(' و ');
+}
+function words(n,oneThousandAlone){
+  if(n===0)return 'صفر';
+  const gs=[];let x=n;
+  while(x>0){gs.push(x%1000);x=Math.floor(x/1000);}
+  const out=[];
+  for(let k=gs.length-1;k>=0;k--){
+    const g=gs[k]; if(!g)continue;
+    const t=(g===1&&k===1&&oneThousandAlone)?'':group(g);
+    out.push(((t?t+' ':'')+SCALE[k]).trim());
+  }
+  return out.join(' و ');
+}
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function genNumber(L){
+  let n=0;
+  for(let k=L-1;k>=0;k--){
+    let g=(k===L-1)?rnd(1,999):(Math.random()<.45?0:rnd(1,999));
+    const r=Math.random();
+    if(r<.35)g=Math.round(g/100)*100%1000||g;
+    else if(r<.6)g=Math.round(g/50)*50%1000||g;
+    n+=g*Math.pow(1000,k);
+  }
+  return n||rnd(1,999);
+}
+
+// ---------- state ----------
+let S={total:100,mode:'mixed',fmt:'words',lvl:2,log:[],startedAt:0,cur:null,done:false,t0:0,seen:new Set()};
+function persist(){try{localStorage.setItem(KEY,JSON.stringify({total:S.total,mode:S.mode,fmt:S.fmt,lvl:S.lvl,log:S.log,startedAt:S.startedAt}))}catch(e){}}
+function loadSaved(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){return null}}
+function clearSaved(){try{localStorage.removeItem(KEY)}catch(e){}}
+function screen(id){['start','quiz','result'].forEach(s=>$(s).classList.toggle('hid',s!==id));window.scrollTo(0,0)}
+function showStart(){
+  const sv=loadSaved();
+  const ok=sv&&Array.isArray(sv.log)&&sv.log.length>0&&sv.log.length<(sv.total||100);
+  $('resumeBox').style.display=ok?'block':'none';
+  if(ok)$('resumeTxt').textContent=`${fa(sv.log.length)} سؤال از ${fa(sv.total||100)} پاسخ داده شده است.`;
+  screen('start');
+}
+function startRound(o){
+  S={total:o.total||100,mode:o.mode,fmt:o.fmt,lvl:o.lvl,log:o.log||[],startedAt:o.startedAt||Date.now(),cur:null,done:false,t0:0,seen:new Set()};
+  S.log.forEach(e=>S.seen.add(e.type+e.n+e.unit));
+  screen('quiz');nextQ();
+}
+function makeQ(){
+  const type=S.mode==='mixed'?(Math.random()<.5?'write':'convert'):S.mode;
+  const m=genNumber(S.lvl);
+  if(type==='write'){const u=Math.random()<.5?'تومان':'ریال';const n=u==='ریال'?Math.max(10,Math.round(m/10)*10):m;return {type,n,unit:u,target:u,ans:n};}
+  return Math.random()<.5
+    ?{type,n:m*10,unit:'ریال',target:'تومان',ans:m}
+    :{type,n:m,unit:'تومان',target:'ریال',ans:m*10};
+}
+const expStr=q=>q.digits?`${q.ans.toLocaleString('en-US')} ${q.target}`:words(q.ans,true)+' '+q.target;
+function info(q){return q.type==='write'
+  ?(q.unit==='تومان'?`معادل: ${fmt(q.n*10)} ریال`:`معادل: ${fmt(q.n/10)} تومان`)
+  :`${fmt(q.n)} ${q.unit} = ${fmt(q.ans)} ${q.target}`}
+function nextQ(){
+  if(S.log.length>=S.total){finishRound();return;}
+  let q,tries=0;
+  do{q=makeQ();tries++;}while(S.seen.has(q.type+q.n+q.unit)&&tries<30);
+  S.seen.add(q.type+q.n+q.unit);
+  $('toast').className='';
+  q.digits=S.fmt==='digits'&&q.type==='convert';
+  S.cur=q;S.done=false;S.t0=Date.now();
+  const w=q.type==='write';
+  $('num').innerHTML=w?fmt(q.n):`${fmt(q.n)} <small style="font-size:1.1rem">${q.unit}</small>`;
+  $('unit').textContent=w?q.unit:`به ${q.target}`;
+  $('lblTxt').textContent=w?`این مبلغ را با حروف بنویس (در انتها: ${q.unit})`
+    :`این مبلغ را به ${q.target} تبدیل کن و ${q.digits?'با رقم':'با حروف (در انتها: '+q.target+')'} بنویس`;
+  $('rule').textContent=(!w&&$('hintOn').checked)?(q.target==='تومان'?'ریال ← تومان: یک صفر از آخر حذف کن (÷۱۰)':'تومان ← ریال: یک صفر به آخرش اضافه کن (×۱۰)'):'';
+  const i=S.log.length,inp=$('inp');
+  $('qi').textContent=fa(i+1);$('qTot').textContent=fa(S.total);
+  $('qok').textContent=fa(S.log.filter(e=>e.ok).length);
+  $('pb').style.width=(i/S.total*100)+'%';
+  inp.value='';inp.disabled=false;inp.inputMode=q.digits?'numeric':'text';
+  inp.placeholder=q.digits?'مثلاً: 125000':'مثلاً: دوازده هزار و پانصد تومان';
+  inp.focus();
+  $('chk').disabled=false;$('show').disabled=false;$('nxt').disabled=true;
+  $('nxt').textContent=(i===S.total-1)?'مشاهده‌ی نتیجه':'بعدی';
+  $('fb').className='';$('fb').innerHTML='';
+}
+function record(given,correct,skipped){
+  const q=S.cur;S.done=true;
+  S.log.push({type:q.type,n:q.n,unit:q.unit,target:q.target,digits:!!q.digits,given,expected:expStr(q),ok:correct,skipped:!!skipped,ms:Date.now()-S.t0});
+  persist();
+  $('inp').disabled=true;$('chk').disabled=true;$('show').disabled=true;$('nxt').disabled=false;
+  $('qok').textContent=fa(S.log.filter(e=>e.ok).length);
+  $('pb').style.width=(S.log.length/S.total*100)+'%';
+  S.ansAt=Date.now();
+}
+function check(){
+  if(!S.cur||S.done)return;
+  const v=$('inp').value.trim(); if(!v)return;
+  const q=S.cur,fb=$('fb');
+  const nv=v.replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632).replace(/[۰-۹]/g,d=>d.charCodeAt(0)-1776);
+  let good;
+  if(q.digits){
+    const mm=nv.replace(/[٬,،\s\u200c]/g,'').match(/^(\d+)(تومان|تومن|ریال)?$/);
+    if(!mm){fb.className='bad';fb.textContent='فقط عدد را با رقم بنویس (نوشتن واحد اختیاری است).';return;}
+    const u=mm[2]?(mm[2]==='ریال'?'ریال':'تومان'):q.target;
+    good=(+mm[1]===q.ans)&&u===q.target;
+  }else{
+    if(/\d/.test(nv)){fb.className='bad';fb.textContent='لطفاً با حروف بنویس، نه با رقم.';return;}
+    const a=words(q.ans,true)+' '+q.target,b=words(q.ans,false)+' '+q.target;
+    good=[norm(a),norm(b)].includes(norm(v));
+  }
+  record(v,good,false);
+  notify(good,false,expStr(q));
+  fb.className=good?'ok':'bad';
+  fb.innerHTML=(good?'✓ درست!':'✗ درست نبود. پاسخ صحیح:')+`<div class="ans">${esc(expStr(q))}</div><div class="eq">${info(q)}</div>`;
+}
+function skip(){
+  if(!S.cur||S.done)return;
+  record('',false,true);
+  notify(false,true,expStr(S.cur));
+  $('fb').className='bad';
+  $('fb').innerHTML=`پاسخ:<div class="ans">${esc(expStr(S.cur))}</div><div class="eq">${info(S.cur)}</div>`;
+}
+
+// ---------- notification ----------
+let toastT;
+function beep(ok){try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return;const c=beep.c||(beep.c=new A());const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=ok?880:220;g.gain.setValueAtTime(.15,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.25);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.26);}catch(e){}}
+function notify(ok,skipped,ans){
+  const t=$('toast');
+  t.textContent=ok?'✓ درست بود!':(skipped?'پاسخ نمایش داده شد':'✗ غلط بود');
+  if(!ok&&ans){const s=document.createElement('small');s.textContent='پاسخ درست: '+ans;t.appendChild(s);}
+  t.className='show '+(ok?'ok':'bad');
+  clearTimeout(toastT);toastT=setTimeout(()=>{t.className=''},ok?1800:5000);
+  if($('sndOn').checked){beep(ok);try{if(navigator.vibrate)navigator.vibrate(ok?30:[60,40,60])}catch(e){}}
+}
+
+// ---------- result ----------
+function sec(ms){return Math.round(ms/100)/10}
+function fmtDur(ms){const s=Math.round(ms/1000),m=Math.floor(s/60);return `${fa(m)} دقیقه و ${fa(s%60)} ثانیه`}
+const TL={write:'نوشتن',convert:'تبدیل'};
+function stats(){
+  const L=S.log,ok=L.filter(e=>e.ok).length,tot=L.length;
+  const grp=f=>{const x=L.filter(f);return {n:x.length,ok:x.filter(e=>e.ok).length}};
+  const ms=L.reduce((a,e)=>a+e.ms,0);
+  return {ok,tot,pct:tot?Math.round(ok/tot*100):0,s20:tot?(ok/tot*20):0,t:grp(e=>e.target==='تومان'),r:grp(e=>e.target==='ریال'),w:grp(e=>e.type==='write'),c:grp(e=>e.type==='convert'),ms};
+}
+function verdict(p){return p>=90?'عالی! 🎉':p>=75?'خیلی خوب':p>=50?'قابل قبول، ادامه بده':'نیاز به تمرین بیشتر'}
+const qText=e=>e.type==='write'?`${fmt(e.n)} ${e.unit} (نوشتن با حروف)`:`${fmt(e.n)} ${e.unit} ← ${e.target}${e.digits?' (با رقم)':''}`;
+function finishRound(){
+  const st=stats();
+  $('rScore').textContent=`${fa(st.ok)} از ${fa(st.tot)}`;
+  $('rGrade').textContent=`نمره: ${fa(st.s20.toFixed(1))} از ۲۰  •  ${fa(st.pct)}٪`;
+  $('rVerdict').textContent=verdict(st.pct);
+  const cells=[[`پاسخ به تومان`,st.t],[`پاسخ به ریال`,st.r]];
+  if(st.w.n&&st.c.n)cells.push(['سؤال‌های نوشتن',st.w],['سؤال‌های تبدیل',st.c]);
+  $('rGrid').innerHTML=cells.filter(c=>c[1].n).map(([l,g])=>`<div>${l}<b>${fa(g.ok)} از ${fa(g.n)}</b></div>`).join('')+
+   `<div>زمان کل<b>${fmtDur(st.ms)}</b></div><div>میانگین هر سؤال<b>${fa(sec(st.ms/Math.max(1,st.tot)))} ثانیه</b></div>`;
+  const wrong=S.log.map((e,i)=>({e,i})).filter(x=>!x.e.ok);
+  $('mist').innerHTML=wrong.length?
+    `<div class="scroll"><table><tr><th>#</th><th>سؤال</th><th>پاسخ تو</th><th>پاسخ صحیح</th></tr>`+
+    wrong.map(({e,i})=>`<tr><td>${fa(i+1)}</td><td>${qText(e)}</td><td class="w">${e.skipped?'—':esc(e.given)}</td><td class="w">${esc(e.expected)}</td></tr>`).join('')+`</table></div>`
+    :'<p class="tip">هیچ اشتباهی نداشتی! 👏</p>';
+  $('fallback').classList.add('hid');$('dlNote').textContent='';
+  clearSaved();
+  screen('result');
+}
+function stamp(){const d=new Date(S.startedAt||Date.now());const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`}
+function csvText(){
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const rows=[['شماره','نوع','عدد','واحد داده‌شده','واحد خواسته‌شده','نحوه‌ی پاسخ','پاسخ شما','پاسخ صحیح','نتیجه','زمان (ثانیه)']];
+  S.log.forEach((e,i)=>rows.push([i+1,TL[e.type],e.n,e.unit,e.target,e.digits?'رقم':'حروف',e.skipped?'(نمی‌دانم)':e.given,e.expected,e.ok?'درست':'غلط',sec(e.ms)]));
+  return '\uFEFF'+rows.map(r=>r.map(q).join(',')).join('\r\n');
+}
+function txtText(){
+  const st=stats();
+  let t=`گزارش راند تمرین تومان و ریال\nتاریخ: ${new Date(S.startedAt).toLocaleString('fa-IR')}\n`+
+  `نمره: ${st.ok} از ${st.tot} (${st.pct}٪) — ${st.s20.toFixed(1)} از ۲۰\n`+
+  `پاسخ به تومان: ${st.t.ok} از ${st.t.n} | پاسخ به ریال: ${st.r.ok} از ${st.r.n}\n`+
+  `نوشتن: ${st.w.ok} از ${st.w.n} | تبدیل: ${st.c.ok} از ${st.c.n}\n`+
+  `زمان کل: ${fmtDur(st.ms)}\n\n`;
+  S.log.forEach((e,i)=>{
+    t+=`${i+1}. [${TL[e.type]}] ${e.n.toLocaleString('en-US')} ${e.unit}${e.type==='convert'?' ← '+e.target:''} — ${e.ok?'درست':'غلط'}\n`;
+    if(!e.ok)t+=`   پاسخ تو: ${e.skipped?'(نمی‌دانم)':e.given}\n   پاسخ صحیح: ${e.expected}\n`;
+  });
+  return t;
+}
+async function download(name,data){
+  const note=$('dlNote');
+  try{
+    if(typeof claude==='undefined'){
+      const type=name.endsWith('.csv')?'text/csv;charset=utf-8':'text/plain;charset=utf-8';
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;
+      document.body.appendChild(a);a.click();a.remove();
+      note.textContent='فایل دانلود شد.';return;
+    }
+    const dl=await claude.use('downloads');
+    if(!dl)throw {code:'unavailable'};
+    await dl.save({filename:name,data});
+    note.textContent='فایل ذخیره شد.';
+  }catch(err){
+    if(err&&err.code==='declined'){note.textContent='ذخیره لغو شد.';return;}
+    note.textContent='دانلود در این نمایش ممکن نیست؛ متن گزارش را از کادر زیر کپی کن.';
+    const ta=$('fallback');ta.value=txtText();ta.classList.remove('hid');
+  }
+}
+
+// ---------- events ----------
+function syncFmt(){$('fmtWrap').style.display=$('mode').value==='write'?'none':''}
+$('mode').onchange=syncFmt;syncFmt();
+$('go').onclick=()=>{clearSaved();startRound({total:Math.min(500,Math.max(1,parseInt($('cnt').value)||100)),mode:$('mode').value,fmt:$('fmtSel').value,lvl:+$('lvl').value})};
+$('resume').onclick=()=>{const sv=loadSaved();if(sv)startRound(sv)};
+$('drop').onclick=()=>{clearSaved();showStart()};
+$('exit').onclick=showStart;
+$('chk').onclick=check;
+$('show').onclick=skip;
+$('nxt').onclick=()=>{if(S.done&&Date.now()-S.ansAt>400)nextQ()};
+$('newRound').onclick=showStart;
+$('dlCsv').onclick=()=>download(`toman-rial-log-${stamp()}.csv`,csvText());
+$('dlTxt').onclick=()=>download(`toman-rial-report-${stamp()}.txt`,txtText());
+$('inp').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();if(!S.done)check();}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&S.done&&Date.now()-S.ansAt>400&&!['INPUT','BUTTON'].includes(e.target.tagName)&&!$('quiz').classList.contains('hid'))nextQ();});
+showStart();
+</script>
+</body>
+</html>
